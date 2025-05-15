@@ -38,8 +38,8 @@ const cards = [
 
 const Overview = () => {
   return (
-    <div className='px-8'>
-     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-4">
+    <div className=''>
+     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       {cards.map((card, index) => (
         <div
           key={index}
@@ -72,9 +72,8 @@ const Overview = () => {
       <div className='h-full max-lg:ml-0 flex-1   bg-white shadow rounded-2xl border border-gray-100  flex flex-col p-4 py-8 ml-7'>
         <div className='mb-8 px-2 flex items-center justify-between text-[12px] font-medium '>
           <h1 className=' font-nunito font-bold text-xl '>Expenses This Month</h1>
-          {/* <span className='text-[grey]'>Last 3 months</span> */}
           </div>
-        <div className='w-full h-full'>
+        <div className='w-full h-full mt-[-40px]'>
           <PieChart />
         </div>
       </div>
