@@ -3,13 +3,23 @@ import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
+import { useQuery } from "@tanstack/react-query";
+import { getTranscation } from "../../services/api";
+import { format } from "date-fns"
+
 
 type TABLE_PROP_TYPES = {
-    isOpen?:boolean,
     setIsOpen:()=>void
 }
 
-const Table = ({isOpen,setIsOpen}:TABLE_PROP_TYPES) => {
+const Table = ({setIsOpen}:TABLE_PROP_TYPES) => {
+    const {data, isLoading, isError, error} = useQuery({
+        queryKey:["transactions-table"],
+        queryFn:getTranscation
+    })
+    if (isLoading) return <p>Loading...</p>;
+    console.log(data)
+    // if (isError) return console.log(error)
     return (
 
         <div className="">
@@ -50,15 +60,15 @@ const Table = ({isOpen,setIsOpen}:TABLE_PROP_TYPES) => {
                     }
                 </tr>
                 {
-                    transactions.map(item => (
+                    data?.transactions?.map((item:any) => (
                         <tr key={item.id} className="text-[14px] border-b-[1px] border-[#e4e3e350] ">
                             <td className="pl-5 font-bold py-3">{item.title}</td>
                             <td className="pl-5 py-3">Rs.{item.amount}</td>
                             <td className={` pl-5 py-3`}>
-                                <span className={`${item.type == "Income" ? "bg-green-200 text-green-600" : "bg-red-200 text-red-500"} font-bold px-[8px] py-[3px] rounded-xl`}>{item.type}</span>
+                                <span className={`${item.type == "income" ? "bg-green-200 text-green-600" : "bg-red-200 text-red-500"} font-bold px-[8px] py-[3px] rounded-xl`}>{item.type}</span>
                             </td>
                             <td className="pl-5 py-3">{item.category}</td>
-                            <td className="pl-5 py-3 text-blue-500">{item.date}</td>
+                            <td className="pl-5 py-3 text-blue-500">{format(item.date,"yyyy-MM-dd")}</td>
                             <td className="pl-5 py-3 text-[#525050c5] text-[20px] font-bold flex items-center">
                                 <button className=" cursor-pointer "><MdDelete /></button>
                                 <button className="ml-5 cursor-pointer"><MdEdit /></button>

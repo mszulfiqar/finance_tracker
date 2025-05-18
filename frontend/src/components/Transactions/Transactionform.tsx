@@ -3,19 +3,49 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { RxCross1 } from "react-icons/rx";
+import { format } from "date-fns"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createTranscation } from "../../services/api.ts";
+import { ToastContainer, toast } from 'react-toastify';
 
 type TRANSACTIONFORM_PROPS_TYPES = {
     setIsOpen: () => void,
 }
-
-const Transactionform = ({ setIsOpen}: TRANSACTIONFORM_PROPS_TYPES) => {
+const expenseCategories = ["Food", "Transport", "Utilities"];
+const incomeCategories = ["Salary", "Bonus", "Freelance"];
+const Transactionform = ({ setIsOpen }: TRANSACTIONFORM_PROPS_TYPES) => {
     const { register, handleSubmit, formState: { errors }, control, watch } = useForm();
     const type = watch("type");
-    const expenseCategories = ["Food", "Transport", "Utilities"];
-    const incomeCategories = ["Salary", "Bonus", "Freelance"];
+
+    // const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: createTranscation,
+        onSuccess: (data) => {
+            // queryClient.invalidateQueries(['data']);
+            // console.log("Success",)
+            toast.success(data.message)
+        },
+        onError: (error: any) => {
+            // You can type error more specifically if you want
+            toast.error(error.message)
+            console.error('Error submitting data:', error);
+        },
+    });
+
     const fromHandler = async (data: any) => {
         setIsOpen()
-        console.log(data)
+        const formatedDate = format(data.date, "yyyy-MM-dd");
+        const changedData = {
+            title: data.title,
+            amount: parseFloat(data.amount),
+            category: data.category,
+            type: data.type,
+            description: data.description,
+            date: formatedDate
+        }
+        mutation.mutate(changedData)
+        console.log(changedData)
     }
     return (
         <div className="font-nunito px-5 overflow-auto">
@@ -57,7 +87,8 @@ const Transactionform = ({ setIsOpen}: TRANSACTIONFORM_PROPS_TYPES) => {
                                         placeholderText="Select transaction date"
                                         className="w-full outline-none  rounded px-2 py-1"
                                         onChange={(data) => field.onChange(data)}
-                                        selected={field.value} />
+                                        selected={field.value}
+                                        dateFormat="dd-MM-yyyy" />
                                 )}
                             />
                             <FaRegCalendarAlt className=" text-[20px] " />
