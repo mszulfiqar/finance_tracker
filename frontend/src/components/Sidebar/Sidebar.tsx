@@ -6,6 +6,7 @@ import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdHome } from "react-icons/md";
 import { MdOutlineReceiptLong } from "react-icons/md";
 import { NavLink } from "react-router";
+import { LuClipboardPenLine } from "react-icons/lu";
 
 type SIDE_MENU_TYPES = {
     name: string,
@@ -23,6 +24,10 @@ const SIDE_MENU: SIDE_MENU_TYPES[] = [
         name: "Transactions",
         icon: <MdOutlineReceiptLong />,
         path: "/transactions",
+    },{
+        name: "Budget ",
+        icon: <LuClipboardPenLine />,
+        path: "/budget",
     }
 ]
 
@@ -38,7 +43,7 @@ const Sidebar = () => {
             initial={{ width: 220 }}
             animate={{ width: isOpen ? 220 : 80 }}
             className="h-full flex flex-col">
-            <div className="flex items-center text-3xl font-bold font-nunito py-4 px-3 relative cursor-">
+            <div className="flex items-center text-3xl font-bold font-nunito pt-10 px-3 relative cursor-">
                 <LuRadius className={`${isOpen ? "" : "ml-2"} text-[#401c94d8]`} />
                 <h2 className={`${isOpen ? "inline-block" : "hidden"} ml-1`}>FinTracker</h2>
                 {
@@ -47,7 +52,7 @@ const Sidebar = () => {
                 }
 
             </div>
-            <div>
+            <div className="mt-8">
                 <span className={`${isOpen?"text-[12px] px-3 font-medium text-[#808080b9]":"text-[12px] pl-7 font-medium text-[#808080b9]"}`}>{isOpen ? "Controls" : "C"}</span>
                 <div className="p-3 ">
                     {

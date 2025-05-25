@@ -9,6 +9,8 @@ export class AppError extends Error {
 
 export const errorMiddleware =  (err,req,res,next) => {
     const errorStatus = err.statusCode || 500;
-    const errorMessage = err.message || "Server is down";
-    return res.json({errorStatus:errorStatus,errorMessage:errorMessage})
+    const errorMessage = err.message || "Server is down"
+    return res.status(errorStatus).json({ errorStatus, errorMessage });
+
+    // return res.json({errorStatus:errorStatus,errorMessage:errorMessage})
 }

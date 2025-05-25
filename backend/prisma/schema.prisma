@@ -24,3 +24,12 @@ model transaction{
   description String?
   
 }
+
+model budget{
+  id  Int @id @default(autoincrement())
+  category String
+  budgeted Int
+  // spent Int?
+  // remaining Int?
+  // progressbar Int?
+}

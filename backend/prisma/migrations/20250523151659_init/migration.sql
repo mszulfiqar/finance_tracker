@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "budget" ALTER COLUMN "spent" DROP NOT NULL,
+ALTER COLUMN "remaining" DROP NOT NULL,
+ALTER COLUMN "progressbar" DROP NOT NULL;

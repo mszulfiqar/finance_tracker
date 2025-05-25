@@ -1,34 +1,37 @@
 import { Controller, useForm } from "react-hook-form"
 import { FaRegCalendarAlt } from "react-icons/fa";
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { RxCross1 } from "react-icons/rx";
 import { format } from "date-fns"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTranscation } from "../../services/api.ts";
-import { ToastContainer, toast } from 'react-toastify';
+import { createTranscation, deleteTranscation } from "../../services/transactions.ts";
+import { DatePickerDemo } from "./DatePicker.tsx";
+import { toast } from "sonner"
+import { expenseCategories, incomeCategories } from "@/utils/utils.tsx";
+
 
 type TRANSACTIONFORM_PROPS_TYPES = {
     setIsOpen: () => void,
+    data?:any
 }
-const expenseCategories = ["Food", "Transport", "Utilities"];
-const incomeCategories = ["Salary", "Bonus", "Freelance"];
-const Transactionform = ({ setIsOpen }: TRANSACTIONFORM_PROPS_TYPES) => {
+
+const Transactionform = ({ setIsOpen,data }: TRANSACTIONFORM_PROPS_TYPES) => {
+
     const { register, handleSubmit, formState: { errors }, control, watch } = useForm();
     const type = watch("type");
 
-    // const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: createTranscation,
         onSuccess: (data) => {
-            // queryClient.invalidateQueries(['data']);
+            queryClient.invalidateQueries({ queryKey: ['transactions-table'] });
+            queryClient.invalidateQueries({ queryKey: ['budgets'] });
             // console.log("Success",)
-            toast.success(data.message)
+            toast(data.message)
         },
         onError: (error: any) => {
             // You can type error more specifically if you want
-            toast.error(error.message)
+            toast(error.message)
             console.error('Error submitting data:', error);
         },
     });
@@ -67,31 +70,27 @@ const Transactionform = ({ setIsOpen }: TRANSACTIONFORM_PROPS_TYPES) => {
                     </div>
                 </div>
 
-                <div className="flex mb-4">
+                <div className="flex mb-4 ">
                     <div className="flex-1">
                         <label htmlFor="amount" className="text-black text-[15px] font-bold ">Amount</label>
-                        <input type="number" {...register("amount", { required: "Amount is missing" })} className="outline-none border-[1px] border-[grey] rounded px-2 py-1" />
+                        <input type="number" {...register("amount", { required: "Amount is missing" })} className="outline-none border-[1px] border-[grey] rounded px-2 py-1.5" />
                         {typeof errors.amount?.message === "string" && (
                             <span className="text-red-500 text-sm">{errors.amount.message}</span>
                         )}
                     </div>
                     <div className="flex-1 ml-2">
                         <label htmlFor="date" className="text-black text-[15px] font-bold " >Date</label>
-                        <div className="flex items-center border-[1px] border-[grey] rounded pr-2">
+                        <div className="flex items-center border-[1px] border-[grey] rounded ">
+
                             <Controller
                                 name="date"
                                 control={control}
                                 rules={{ required: "Date is missing" }}
                                 render={({ field }) => (
-                                    <DatePicker
-                                        placeholderText="Select transaction date"
-                                        className="w-full outline-none  rounded px-2 py-1"
-                                        onChange={(data) => field.onChange(data)}
-                                        selected={field.value}
-                                        dateFormat="dd-MM-yyyy" />
-                                )}
-                            />
-                            <FaRegCalendarAlt className=" text-[20px] " />
+                                    <DatePickerDemo
+                                        date={field.value}
+                                        setDate={field.onChange} />
+                                )} />
                         </div>
                         {typeof errors.date?.message === "string" && (
                             <span className="text-red-500 text-sm">{errors.date.message}</span>

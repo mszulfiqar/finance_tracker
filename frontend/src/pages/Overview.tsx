@@ -1,45 +1,46 @@
-import { FaArrowDown, FaArrowUp, FaUniversity } from 'react-icons/fa';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { BsCashStack } from "react-icons/bs";
 import Linechart from '../components/Overview/Linechart';
 import CountUp from 'react-countup';
 import PieChart from '../components/Overview/PieChart';
+import { useQuery } from '@tanstack/react-query';
+import { getTransactionOverview } from '@/services/transactions';
+  
 
-const cards = [
+const Overview = () => {
+      const { data, isLoading} = useQuery({
+        queryKey: ["trans-stats"],
+        queryFn: getTransactionOverview
+    });
+    if (isLoading) return <p>Loading...........</p>
+    // console.log(data)
+    const cards = [
     {
       title: 'Total Balance',
-      amount: 2500,
+      amount: data?.totalIncome,
       icon: <BsCashStack  className="text-green-600" />,
       bgColor: 'bg-green-100',
       textColor: 'text-green-600',
     },
     {
       title: 'In',
-      amount: 5000,
+      amount: data?.totalIncome,
       icon: <FaArrowDown className="text-blue-600" />,
       bgColor: 'bg-blue-100',
       textColor: 'text-blue-600',
     },
     {
       title: 'Out',
-      amount: 3200,
+      amount: data?.totalexpense,
       icon: <FaArrowUp className="text-red-500" />,
       bgColor: 'bg-red-100',
       textColor: 'text-red-500',
     },
-    {
-      title: 'Loan',
-      amount: 700,
-      icon: <FaUniversity className="text-yellow-500" />,
-      bgColor: 'bg-yellow-100',
-      textColor: 'text-yellow-500',
-    },
-  ];
   
-
-const Overview = () => {
+  ];
   return (
     <div className=''>
-     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
       {cards.map((card, index) => (
         <div
           key={index}

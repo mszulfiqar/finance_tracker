@@ -1,3 +1,6 @@
+import { BsCashStack } from "react-icons/bs";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+
 export const tableHeaders = [
   {
     value: "TITLE"
@@ -42,3 +45,72 @@ export const transactions = [
   { id: 20, title: "Bus Pass", amount: 40, date: "2025-05-21", category: "Transport", type: "Expense" },
 
 ]
+
+export const cards = [
+    {
+        title: 'Total Budget',
+        amount: 2500,
+        icon: <BsCashStack className="text-green-600" />,
+        bgColor: 'bg-green-100',
+        textColor: 'text-green-600',
+    },
+    {
+        title: 'Total Spent',
+        amount: 5000,
+        icon: <FaArrowUp className="text-red-500" />,
+        bgColor: 'bg-blue-100',
+        textColor: 'text-blue-600',
+    },
+    {
+        title: 'Remaining Budget',
+        amount: 3200,
+        icon: <FaArrowDown className="text-blue-600" />,
+        bgColor: 'bg-red-100',
+        textColor: 'text-red-500',
+    },
+];
+
+
+export const tableHeaders_budget = [
+  {
+    value: "CATEGORY"
+  },
+  {
+    value: "BUDGETED "
+  },
+  {
+    value: "SPENT"
+  },
+  {
+    value: "REMAINING"
+  },
+  {
+    value: "PROGRESS BAR"
+  },
+  {
+    value: "ACTIONS"
+  },
+]
+
+
+export const expenseCategories = ["Rent","Groceries","Utilities","Transport","Healthcare","Entertainment","Other"];
+export const incomeCategories = [  "Salary",
+  "Freelance",
+  "Business",
+  "Investments",
+  "Rental Income",
+  "Dividends",
+  "Gifts",
+  "Interest",
+  "Other"]
+
+  // utils/handleAxiosError.ts
+import { AxiosError } from "axios";
+
+export function getAxiosErrorMessage(error: unknown): string {
+  if (error && typeof error === "object" && "isAxiosError" in error) {
+    const axiosError = error as AxiosError<{ errorMessage: string }>;
+    return axiosError.response?.data?.errorMessage || "Something went wrong";
+  }
+  return "An unexpected error occurred";
+}

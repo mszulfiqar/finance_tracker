@@ -1,13 +1,16 @@
 import { motion, AnimatePresence } from "motion/react"
 import Transactionform from "./Transactionform";
+import type { Dispatch, SetStateAction } from "react";
 
 type PROPS_TYPE = {
-    isOpen: boolean,
+    isOpen?: boolean,
     setIsOpen: () => void,
-    state:React.Dispatch<React.SetStateAction<boolean>>
+    setEdit?:Dispatch<SetStateAction<boolean>>;
+    // state:React.Dispatch<React.SetStateAction<boolean>>
+    data?:any
 }
 
-const SlideinModel = ({ isOpen, setIsOpen,state }: PROPS_TYPE) => {
+const SlideinModel = ({ isOpen, setIsOpen,data }: PROPS_TYPE) => {
     return (
         <AnimatePresence>
             {
@@ -21,7 +24,7 @@ const SlideinModel = ({ isOpen, setIsOpen,state }: PROPS_TYPE) => {
                             className='w-[470px]  fixed top-0 right-0 h-screen  bg-white border border-gray-200 rounded-2xl shadow  '>
                             
                             
-                            <Transactionform setIsOpen={setIsOpen} state={state} />
+                            <Transactionform setIsOpen={setIsOpen}  />
                         </motion.div>
                     </>
                 )
